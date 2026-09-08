@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Perfect Science Academy website
 
-## Getting Started
+A premium, responsive public website for Perfect Science Academy in 160 GB Kalyki, Gojra. Built with Next.js, TypeScript, Tailwind CSS and Motion.
 
-First, run the development server:
+## Routes
+
+- `/` — cinematic 14-section academy story
+- `/faculty` — faculty profiles and contact details
+- `/results` — complete supplied SSC and Class 9 results for 2026
+- `/admissions` — frontend-only enquiry flow that continues on WhatsApp
+- `/promos` — reusable social-poster concepts
+
+## Local development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Validation commands:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run lint
+npm run typecheck
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Image locations
 
-## Learn More
+The layout shows designed placeholders until real images are added at:
 
-To learn more about Next.js, take a look at the following resources:
+```text
+public/images/teachers/usman.jpg
+public/images/teachers/sajid.jpg
+public/images/teachers/shahzaib.jpg
+public/images/academy/classroom-1.jpg
+public/images/academy/classroom-2.jpg
+public/images/academy/classroom-3.jpg
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Academy facts and page content are maintained centrally in `src/data/academy.ts`.
