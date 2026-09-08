@@ -11,8 +11,7 @@ export function CountUp({ value }: { value: number }) {
   const [shown, setShown] = useState(reduce ? value : start);
 
   useEffect(() => {
-    if (!visible) return;
-    if (reduce) { setShown(value); return; }
+    if (!visible || reduce) return;
     const controls = animate(start, value, {
       duration: .85,
       ease: "easeOut",
@@ -21,5 +20,5 @@ export function CountUp({ value }: { value: number }) {
     return () => controls.stop();
   }, [visible, value, reduce, start]);
 
-  return <motion.span ref={ref}>{shown}</motion.span>;
+  return <motion.span ref={ref}>{reduce ? value : shown}</motion.span>;
 }

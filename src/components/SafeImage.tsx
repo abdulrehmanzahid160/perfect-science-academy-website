@@ -26,6 +26,7 @@ export function SafeImage({ src, alt, className = "", priority, sizes = "100vw" 
           alt={alt}
           fill
           priority={priority}
+          unoptimized
           sizes={sizes}
           onError={() => setFailed(true)}
           className="object-cover"
