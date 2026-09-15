@@ -1,48 +1,26 @@
 "use client";
 
-import { FormEvent, useRef, useState } from "react";
-
-type FormStatus = "idle" | "submitting" | "complete";
+import { FormEvent, useState } from "react";
+import { subjects, whatsappLink } from "@/data/academy";
 
 export function AdmissionForm() {
   const [error, setError] = useState("");
-  const [status, setStatus] = useState<FormStatus>("idle");
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const formElement = event.currentTarget;
-    const form = new FormData(formElement);
-    const required = ["name", "parent", "phone", "level"];
-    const missing = required.some((field) => !String(form.get(field) || "").trim());
-
-    if (missing) {
-      setError("Please complete the student name, parent / guardian name, phone number and class.");
-      return;
-    }
-
+    const form = new FormData(event.currentTarget);
+    const name = String(form.get("name") || "").trim();
+    const parent = String(form.get("parent") || "").trim();
+    const phone = String(form.get("phone") || "").trim();
+    const level = String(form.get("level") || "").trim();
+    if (!name || !parent || !phone || !level) { setError("Please complete the student name, parent or guardian name, phone number and class."); return; }
     setError("");
-    setStatus("submitting");
-    timerRef.current = setTimeout(() => {
-      formElement.reset();
-      setStatus("complete");
-    }, 700);
+    const selected = form.getAll("subjects").join(", ") || "Not specified";
+    const school = String(form.get("school") || "Not specified").trim();
+    const note = String(form.get("message") || "No additional message").trim();
+    const message = `Assalam-o-Alaikum, I would like to make an admission enquiry.\n\nStudent: ${name}\nParent / Guardian: ${parent}\nPhone: ${phone}\nClass: ${level}\nSubjects: ${selected}\nSchool / College: ${school}\nMessage: ${note}`;
+    window.open(whatsappLink(message), "_blank", "noopener,noreferrer");
   }
 
-  if (status === "complete") {
-    return <div className="form-success" role="status" aria-live="polite"><span>✓</span><p className="eyebrow">Demo submitted</p><h2>Thank you for your interest.</h2><p>This website demonstration did not transmit or store your information. Please call the academy when you want to make a real enquiry.</p><button className="text-link" type="button" onClick={() => setStatus("idle")}>Send another demo <span>↗</span></button></div>;
-  }
-
-  return <form className="admission-form" onSubmit={submit} noValidate>
-    <div className="field"><label htmlFor="name">Student name *</label><input id="name" name="name" autoComplete="name"/></div>
-    <div className="field"><label htmlFor="parent">Parent / guardian name *</label><input id="parent" name="parent" autoComplete="name"/></div>
-    <div className="field"><label htmlFor="phone">Phone number *</label><input id="phone" name="phone" inputMode="tel" autoComplete="tel"/></div>
-    <div className="field"><label htmlFor="whatsapp">WhatsApp number</label><input id="whatsapp" name="whatsapp" inputMode="tel"/></div>
-    <div className="field full"><label htmlFor="level">Class *</label><select id="level" name="level" defaultValue=""><option value="" disabled>Select a class</option><option>1–8</option><option>9</option><option>10</option><option>11</option><option>12</option></select></div>
-    <fieldset className="full"><legend>Subjects</legend><div className="check-row">{["Mathematics", "Physics", "Chemistry", "Biology", "English"].map((subject) => <label key={subject}><input type="checkbox" name="subjects" value={subject}/><span>{subject}</span></label>)}</div></fieldset>
-    <div className="field full"><label htmlFor="school">School / college</label><input id="school" name="school"/></div>
-    <div className="field full"><label htmlFor="message">Message</label><textarea id="message" name="message" rows={4}/></div>
-    {error && <p className="form-error full" role="alert">{error}</p>}
-    <div className="form-submit full"><p>Demonstration form only. No information is sent, stored or emailed.</p><button className="button button-dark" type="submit" disabled={status === "submitting"}>{status === "submitting" ? "Submitting…" : "Submit enquiry"}<span>↗</span></button></div>
-  </form>;
+  return <form className="admission-form" onSubmit={submit} noValidate><div className="field"><label htmlFor="name">Student name *</label><input id="name" name="name" autoComplete="name" placeholder="Enter student name"/></div><div className="field"><label htmlFor="parent">Parent / guardian *</label><input id="parent" name="parent" autoComplete="name" placeholder="Enter parent name"/></div><div className="field"><label htmlFor="phone">Phone number *</label><input id="phone" name="phone" inputMode="tel" autoComplete="tel" placeholder="03XX XXXXXXX"/></div><div className="field"><label htmlFor="level">Current class *</label><select id="level" name="level" defaultValue=""><option value="" disabled>Select a class</option>{Array.from({ length: 12 }, (_, index) => <option key={index + 1}>Class {index + 1}</option>)}</select></div><fieldset className="full"><legend>Subjects of interest</legend><div className="check-row">{subjects.map((subject) => <label key={subject}><input type="checkbox" name="subjects" value={subject}/><span>{subject}</span></label>)}</div></fieldset><div className="field full"><label htmlFor="school">School / college</label><input id="school" name="school" placeholder="Optional"/></div><div className="field full"><label htmlFor="message">Anything else we should know?</label><textarea id="message" name="message" rows={4} placeholder="Subjects, goals, preferred timings..."/></div>{error && <p className="form-error full" role="alert">{error}</p>}<div className="form-submit full"><p>Your details are not stored on this website. They are added to a WhatsApp message for you to review and send.</p><button className="button button-primary" type="submit">Continue on WhatsApp <span>↗</span></button></div></form>;
 }

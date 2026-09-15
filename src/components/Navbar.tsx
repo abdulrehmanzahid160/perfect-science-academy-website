@@ -2,15 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { motion, useScroll, useSpring } from "motion/react";
-import { navigation } from "@/data/academy";
+import { useEffect, useState } from "react";
+import { academy, navigation, whatsappLink } from "@/data/academy";
+import { urduNavigation } from "@/data/urdu";
 import { Logo } from "./Logo";
 
 export function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 180, damping: 28 });
-  return <><header className="site-header"><div className="nav-shell"><Logo /><nav className="desktop-nav" aria-label="Primary navigation">{navigation.map((item) => <Link key={item.href} href={item.href} className={pathname === item.href ? "active" : ""}>{item.label}</Link>)}</nav><Link className="nav-cta" href="/admissions">Apply now <span>↗</span></Link><button className="menu-button" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="mobile-menu"><span className="menu-label">Menu</span><span className="menu-line"/><span className="menu-line"/></button></div><motion.div className="scroll-progress" style={{ scaleX }} /></header>{open && <motion.nav id="mobile-menu" className="mobile-nav" initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} aria-label="Mobile navigation">{navigation.map((item, index) => <Link onClick={() => setOpen(false)} key={item.href} href={item.href}><span>0{index + 1}</span>{item.label}</Link>)}</motion.nav>}</>;
+  const isUrdu = pathname === "/ur" || pathname.startsWith("/ur/");
+  const items = isUrdu ? urduNavigation : navigation;
+  const languageHref = isUrdu ? (pathname.replace(/^\/ur/, "") || "/") : (pathname === "/" ? "/ur" : `/ur${pathname}`);
+  useEffect(() => { document.body.style.overflow = open ? "hidden" : ""; return () => { document.body.style.overflow = ""; }; }, [open]);
+
+  return <header className="site-header"><div className="nav-shell"><Logo/><nav className="desktop-nav" aria-label={isUrdu ? "مرکزی نیویگیشن" : "Primary navigation"} dir={isUrdu ? "rtl" : "ltr"}>{items.map((item) => <Link key={item.href} href={item.href} aria-current={pathname === item.href ? "page" : undefined}>{item.label}</Link>)}</nav><a className="nav-phone" href={`tel:${academy.phone.replaceAll(" ", "")}`}><small>{isUrdu ? "فون کریں" : "Call us"}</small>{academy.phone}</a><Link className="language-switch" href={languageHref} onClick={() => setOpen(false)} hrefLang={isUrdu ? "en" : "ur"}>{isUrdu ? "English" : "اردو"}</Link><Link className="nav-cta" href={isUrdu ? "/ur/admissions" : "/admissions"}>{isUrdu ? "داخلہ" : "Apply now"} <span aria-hidden="true">↗</span></Link><button className="menu-button" type="button" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? (isUrdu ? "مینو بند کریں" : "Close menu") : (isUrdu ? "مینو کھولیں" : "Open menu")}><span/><span/></button></div><nav id="mobile-menu" className={`mobile-nav ${open ? "is-open" : ""}`} aria-label={isUrdu ? "موبائل نیویگیشن" : "Mobile navigation"} dir={isUrdu ? "rtl" : "ltr"}><div className="mobile-nav-links">{items.map((item, index) => <Link onClick={() => setOpen(false)} key={item.href} href={item.href}><span>0{index + 1}</span>{item.label}</Link>)}</div><div className="mobile-nav-actions"><Link className="language-switch mobile-language" href={languageHref} onClick={() => setOpen(false)}>{isUrdu ? "View in English" : "اردو میں دیکھیں"}</Link><a className="button button-primary" href={whatsappLink(isUrdu ? "السلام علیکم، میں پرفیکٹ سائنس اکیڈمی میں داخلے کے بارے میں معلومات چاہتا/چاہتی ہوں۔" : "Assalam-o-Alaikum, I would like information about admission at Perfect Science Academy.")} target="_blank" rel="noreferrer">{isUrdu ? "واٹس ایپ کریں" : "Chat on WhatsApp"} <span>↗</span></a><a href={`tel:${academy.phone.replaceAll(" ", "")}`}>{academy.phone}</a></div></nav></header>;
 }
