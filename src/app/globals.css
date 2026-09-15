@@ -61,8 +61,9 @@ h1 em, h2 em { color: var(--lime); font-style: normal; }
 .desktop-nav a:hover, .desktop-nav a[aria-current="page"] { color: var(--forest-light); border-bottom-color: var(--forest); }
 .nav-phone { padding-left: 22px; border-left: 1px solid var(--line); font-size: 13px; font-weight: 700; line-height: 1.15; }
 .nav-phone small { display: block; margin-bottom: 3px; color: var(--muted); font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
-.language-switch { display: inline-grid; place-items: center; min-width: 50px; min-height: 38px; padding: 7px 11px; border: 1px solid var(--line); border-radius: 8px; color: var(--forest); font-size: 13px; font-weight: 700; }
-.language-switch:hover { border-color: var(--forest); background: #edf2ee; }
+.language-switch { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 40px; padding: 8px 12px; border: 1px solid #aebdb5; border-radius: 8px; background: #edf4ef; color: var(--forest); font-size: 12px; font-weight: 700; white-space: nowrap; }
+.language-switch:hover { border-color: var(--forest); background: var(--mint); }
+.language-icon { width: 18px; height: 18px; display: grid; place-items: center; border: 1px solid currentColor; border-radius: 50%; font: 800 11px/1 var(--font-sans); }
 .nav-cta { display: inline-flex; align-items: center; gap: 20px; padding: 12px 16px; border-radius: 8px; background: var(--forest); color: white; font-size: 13px; font-weight: 700; }
 .nav-cta span { color: var(--lime); }
 .menu-button { display: none; width: 46px; height: 46px; margin-left: auto; padding: 13px 10px; border: 0; background: transparent; }
@@ -292,7 +293,6 @@ fieldset { margin: 0; padding: 0; border: 0; }
   .mobile-nav-links a { display: flex; align-items: center; gap: 25px; padding: 17px 0; border-bottom: 1px solid var(--line); font: 700 32px/1 var(--font-display); }
   .mobile-nav-links span { color: var(--muted); font: 700 9px var(--font-sans); }
   .mobile-nav-actions { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; font-weight: 700; }
-  .mobile-nav-actions .mobile-language { display: none; }
   .hero-layout { grid-template-columns: 1fr .65fr; gap: 40px; }
   .hero-copy h1 { font-size: clamp(56px, 8vw, 78px); }
   .hero-proof { min-height: 380px; }
@@ -313,7 +313,11 @@ fieldset { margin: 0; padding: 0; border: 0; }
   .logo b { font-size: 13px; }
   .logo small { font-size: 7px; }
   .mobile-nav { top: 68px; }
-  .language-switch { min-width: 54px; margin-left: auto; }
+  .language-switch { min-width: 54px; margin-left: auto; padding-inline: 10px; }
+  .language-switch .language-icon { display: none; }
+  .language-switch > span:last-child { font-size: 0; }
+  .language-switch > span:last-child::after { content: "اردو"; font-size: 13px; }
+  .language-switch.is-urdu > span:last-child::after { content: "EN"; }
   .menu-button { margin-left: 0; }
   .mobile-nav[dir="rtl"] .mobile-nav-actions { justify-content: flex-start; }
   .home-hero { padding-top: 120px; }
