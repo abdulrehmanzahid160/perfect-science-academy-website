@@ -12,8 +12,8 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const isUrdu = pathname === "/ur" || pathname.startsWith("/ur/");
   const items = isUrdu ? urduNavigation : navigation;
-  const isVerification = pathname === "/verify" || pathname.startsWith("/verify/");
-  const languageHref = isVerification
+  const isUtilityRoute = pathname === "/verify" || pathname.startsWith("/verify/") || pathname === "/admin" || pathname.startsWith("/admin/");
+  const languageHref = isUtilityRoute
     ? "/ur"
     : isUrdu
     ? pathname.replace(/^\/ur/, "") || "/"
