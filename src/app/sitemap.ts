@@ -10,7 +10,7 @@ const pages = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
-  return pages.flatMap(({ path, priority, frequency }) => {
+  const localizedPages = pages.flatMap(({ path, priority, frequency }) => {
     const englishUrl = `${siteUrl}${path || "/"}`;
     const urduUrl = `${siteUrl}/ur${path}`;
     const alternates = { languages: { en: englishUrl, ur: urduUrl } };
@@ -19,4 +19,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       { url: urduUrl, lastModified, changeFrequency: frequency, priority: priority - 0.1, alternates },
     ];
   });
+  return [
+    ...localizedPages,
+    { url: `${siteUrl}/verify`, lastModified, changeFrequency: "monthly", priority: 0.5 },
+  ];
 }

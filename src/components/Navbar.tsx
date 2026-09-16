@@ -12,7 +12,10 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const isUrdu = pathname === "/ur" || pathname.startsWith("/ur/");
   const items = isUrdu ? urduNavigation : navigation;
-  const languageHref = isUrdu
+  const isVerification = pathname === "/verify" || pathname.startsWith("/verify/");
+  const languageHref = isVerification
+    ? "/ur"
+    : isUrdu
     ? pathname.replace(/^\/ur/, "") || "/"
     : pathname === "/" ? "/ur" : `/ur${pathname}`;
 
